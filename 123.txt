@@ -1,0 +1,800 @@
+功能：
+(in)参数一()：
+(in)参数二()：
+(in)参数三()：
+(in)参数四()：
+(in)参数五()：
+返回值(BOOL)：
+
+
+/************************************************************************/
+/* 功能:                                                                */
+/* 参数:                                                                */
+/* 返回值:                                                              */
+/* 日期:                                                                */
+/* 作者:                                                                */
+/************************************************************************/
+http://101.227.244.171:8090/itower/jf/wslog/show
+44030743800024
+11010243840008
+44030143800019
+44030743800004
+http://101.227.253.208:58090/itower/jf/wslog/show
+35018143800001
+4．系统菜单ModifyStyle(WS_SYSMENU, 0);
+
+
+
+CButton类 (按钮)
+1.动态创建: CButton *m_wndBtn = new CButton
+m_wndBtn->Create(名称,风格, 位置(相对父窗口位置), 父窗口(this),控件ID); 
+2.风格:
+BS_DEFPUSHBUTTON | WS_VISIBLE | WS_CHILD :普通按钮风格
+BS_AUTORADIOBUTTON | WS_GROUP : 单选按钮风格(第一个单选按钮设置WS_GROUP属性)
+BS_GROUPBOX:? 组静态框
+BS_BITMAP:?? 支持位图
+3.动态创建事件:
+?(1)ON_BN_CLICKED(控件ID,响应函数); //单击事件
+4.特有函数:
+5:应用:
+(1)画背景色: 
+重载DrawItem虚函数， 并时控件设置BS_OWNERDRAW风格
+(2)绘制单选按钮背景色:
+? 使用WM_CTRLCOLOR消息:在响应函数中使用
+if (nCtlColor == CTLCOLOR_STATIC)
+??{
+???pDC->SetBkMode(TRANSPARENT);
+???return? CreateSolidBrush(RGB(0,255,0));
+??} 
+
+2)? CEdit类 (编辑框)
+1.?风格: 
+ES_MULTILINE : 多行，使用文本”\r\n”换行回车才显示。
+2. 动态创建事件:
+?EN_CHANGE, 输入一个字符显示后发生。 WM_COMMAND HIWORD(wParam) 
+?设置焦点和离开焦点: if (message == WM_COMMAND)
+?????switch(HIWORD(wParam))
+?????case EN_SETFOCUS:
+?????case EN_KILLFOCUS:
+3.特有函数:
+?? (1) SetSel(0, -1) //设置编辑框中光标位置,若二个参数相等则不会显示全选。
+?参数一:开始位置
+?参数二:结束位置前一个,如:? 256:若参数为1， 则在2|56。
+?-1表示全选。
+??选定编辑框内容
+?? (2) BOOL GetModify()
+??编辑框内容只要被修改，哪怕是修改一样的内容都返回1，否则0。
+(3)?void SetModify(BOOL)
+设置编辑框内容是否被修改， TRUE表示被修改。
+(3)void SetLimitText(UINT) 
+设置编辑框字符最大个数。
+参数:字符最大个数
+(4)?BOOL Undo();
+撤销本次操作，还原上次数据。和Ctrl+Z效果一样。
+(5)?int GetLineCount()
+获取编辑框的行的个数。
+4.通过向导和某个控件绑定值的范围， 然后调用UpdateData(TRUE)，若数据不对则会出现提示。? 
+???? 
+3)? CStatic类 (静态文本框)
+1.风格:
+SS_NOTIFY | SS_ENDELLIPSIS? //该属性在静态文本不够长时显示..., 若没有该属性，若最后一个单词不够长显示时会不显示的。
+SS_BITMAP|SS_CENTERIMAGE //在静态文本中设置bmp格式图片。
+2. 动态创建事件:
+3.特有函数:
+?(1)? SetBitmap
+?功能:设置bmp格式到静态框。
+?(in)参数(HBITMAP)一:位图句柄, ::LoadBitmap(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_NO))。 或者使用CImage::Detach函数可使Png等格式转换Bmp格式。
+?返回值(HBITMAP):位图句柄， 若NULL则没设置成功
+4.应用:
+??将文本框背景去除凸现文字,可以使用WM_CTRLCOLOR消息响应函数中调用
+pDC->SetTextColor(RGB(255, 0, 0)) ;
+???pDC->SetBkMode(TRANSPARENT); 
+???return?? (HBRUSH)GetStockObject(NULL_BRUSH); 
+
+4)? CComboBox类 (组合框)
+?注意: CRect设定控件宽度包括下拉列表宽度
+1.风格:? 
+???? CBS_DROPDOWNLIST? //下拉风格(不可写)
+CBS_DROPDOWN? //下拉风格(可写)
+2. 动态创建事件:
+设置焦点和离开焦点: if (message == WM_COMMAND)
+?????switch(HIWORD(wParam))
+?????case CBN_SETFOCUS:
+?????case CBN_KILLFOCUS:
+3. 特有函数:
+?(1)int? GetCurSel() 获取当前选中的位置, 从0开始计算。 
+?(2)int? SetCurSel(int nSelect) 设置nSelect的位置, 从0开始计算。
+??如果 nSelect 为 -1 ，则清除当前的选择并返回 CB_ERR 。
+如果 nSelect 大于列表中项的个数，不产生效果，返回 CB_ERR。
+成功返回下标。
+(3) int AddString(const char*) 组合框末尾添加一个字符串 
+(4) void ResetContent() 清空组合框列表数据。 
+(5)int DeleteString(UINT uiSelect) 清空组合框列表指定位置数据,? 从0开始计算。 
+(6)int FindStringExact(int, const char*)
+第一个参数为-1表示从头开始查找
+第二个参数:表示要查找的字符串
+返回值: 找到该字符串所在列表的位置,从0开始计算。
+(7) int GetCount();? 
+?? 返回值:下拉框的个数， 0表示没有个数。 
+? 
+5)? CToolTipCtrl类 (气泡提示)
+1.风格： 
+2.动态创建事件:
+3.特有函数: 
+?
+4.应用 :
+在构造函数中加入(设置)
+?EnableToolTips(TRUE); 
+?m_ToolTip.Create(this,TTS_ALWAYSTIP); 
+?m_ToolTip.Activate(TRUE);?? //TRUE:气泡显示，FLASE气泡隐藏
+?m_ToolTip.AddTool(this,"");//添加 tips
+?m_ToolTip.SetMaxTipWidth(1000);? //换行
+?m_ToolTip.SetDelayTime(TTDT_INITIAL, 1);
+?m_ToolTip.SetDelayTime(TTDT_AUTOPOP, 500);? //提示持续时间
+?m_ToolTip.SetDelayTime(TTDT_RESHOW, 500);?? //多久时间出现提示。
+然后再PreTranslateMessage中加入(设置):
+if (m_pTip)
+?{m_pTip->RelayEvent( pMsg );}
+最后在OnCreate或OnInitDialog中加入(使用)
+????? m_ToolTip. AddTool(GetDlgItem(IDC_), "123"); //显示的内容如果为空， 则不会出现气泡提示
+??UpdateTipText()//实时改变气泡内容， 可以使用在鼠标移动响应函数中。 
+6)? CDateTimeCtrl类(日期控件)
+1.风格： 
+?? DTS_RIGHTALIGN | DTS_UPDOWN | WS_TABSTOP 该风格与“MM-dd HH:mm”格式搭配
+2.事件:
+?设置焦点和离开焦点: if (message == WM_NOTIFY)
+?????switch(((LPNMHDR)lParam)->code)
+?????case NM_SETFOCUS:
+?????case NM_KILLFOCUS: 
+3.特有函数:
+?获取时间控件的文本时， 要先使用GetTime获取下， 不然获取的时间文本是上次未修改的时间文本(设置好离开焦点时)。
+(1)?BOOL SetFormat(const char*) 设置日期格式
+日期格式有: 
+“yyy”以及更多”y”: 表示全年, 如2014年。
+“yy”:表示年份2位， 如2014显示14。
+“y”表示年尾1位，? 如2014显示4。
+“MMMM”表示月名称， 如九月或英文
+“MMM”表示月名称缩写三个字符， 但是中文操作系统无变化,仍然显示九月。
+“MM”表示数字月份， 不足补0， 如09
+“M”表示数字月份,如9
+"d" 1或2位日期。 
+?"dd" 两位日期,日期为1位数字时，在前加0． 
+?"ddd" 星期缩写成三个字符。 
+?"dddd" 星期全名。 
+?"h" 在12小时格式中，显示1位或2位。 
+?"hh" 12小时格式的两位数显，不足时前补0。 
+?"H" 24小时格式的1位或2位数显。 
+?"HH" 24小时格式的两位数显，不足时前补0。 
+?"m" 分钟的1位或2位数显。 
+?"mm" 分钟的两位数显，不足时前补0。
+“t”表示AM或PM第一个字符,? 如上午就显示上， AM显示A。
+“tt”表示AM或PM，如上午就显示上午。
+??格式有: "yyyy-MM-dd HH:mm:ss"? 
+????“MM-dd HH:mm”
+??//获取格式没有的时间， 则是当前时间。 例如“MM-dd HH:mm”,获取的年就是2014年。 
+?(2) BOOL SetTime(LPSYSTEMTIME) 设置UTC时间(系统时间)
+??例子一:? time_t转换SYSTEMTIME
+??time_t uiTotalSecond = 3600; //从1970年1月1号开始的秒数， 初始化应从该时间开始,这个方法转换uiTotalSecond不能大于2147483647
+FILETIME ft;
+?SYSTEMTIME pst;
+?LONGLONG nLL = Int32x32To64(uiTotalSecond, 10000000) + 116444736000000000;//后面数字是UTC时间
+?ft.dwLowDateTime = (DWORD) nLL;
+?ft.dwHighDateTime = (DWORD) (nLL >> 32);
+?FileTimeToSystemTime(&ft, &pst); 
+?
+??gmtime_s(tm*, time_t*)//从1970年1月1号开始的秒数， 初始化应从该时间开始,
+?SYSTEMTIME st = {1900 + temptm.tm_year, 
+??1 + temptm.tm_mon, 
+??temptm.tm_wday, 
+??temptm.tm_mday, 
+??temptm.tm_hour, 
+??temptm.tm_min, 
+??temptm.tm_sec, 0}; 
+??例子二:? SYSTEMTIME转换time_t
+?SYSTEMTIME st
+?FILETIME ft;
+?SystemTimeToFileTime( &st, &ft );
+?ULONGLONG nLL;
+?nLL = (((LONGLONG)ft.dwHighDateTime) << 32) + (LONGLONG)ft.dwLowDateTime;
+?time_t pt = (long)((LONGLONG)(nLL - 116444736000000000) / 10000000);
+? (3) BOOL SetTime(CTime*) 设置当地时间(包含时区)
+?time_t tSecond = 3600;
+m_Date->SetTime(tSencond); //显示是:1970年1月1号1小时+时区
+m_Date->SetTime(&CTime(年,月，日，时，分，秒))
+?SetTime(time(NULL));//设置控件为当前时间(其实不设置，创建后默认当前时间
+(4) BOOL GetTime(LPSYSTEMTIME) 获取当前控件上面显示的时间,?
+??控件显示多少时间，SYSTEMTIME结构就被填充多少。
+(5) BOOL GetTime(CTime) 获取控件时间的秒数。从1970年1月1号
+? 如果小于1970年1月1号， 获得秒数小于0，会崩溃。
+（6） BOOL SetRang(CTime*, CTime*) 设定时间控件的范围
+CTime tMinRang(2000,1,1,0,0,0);?????? 
+?CTime tMaxRang(2069,12,31,23,59,59);? 
+?m_dateAlarmStart.SetRange(&tMinRang, &tMaxRang);
+4.设置外观和颜色
+?(1) SetMonthCalColor
+??功能:设置月历弹出对话框的颜色。
+??(in)参数(int)一: MCSC_BACKGROUND设置在月份之间的背景色。
+MCSC_MONTHBK设置月份中的背景色。
+MCSC_TEXT设置月份中的文本色。
+MCSC_TITLEBK设置月历题头背景色。
+MCSC_TITLETEXT设置月历题头文本色。
+MCSC_TRAILINGTEXT设置当月份向前后翻页时,与今日相同的日期的颜色。
+??(in)参数(COLORREF)二:颜色
+? ?返回值(COLORREF): 失败返回-1
+7)? CListCtrl类(列表控件)
+2.?风格： 
+LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP
+LVS_SINGLESEL: 列表行只能单选
+?拓展风格:
+??LVS_EX_FULLROWSELECT???? 
+??LVS_EX_ONECLICKACTIVATE
+??LVS_EX_GRIDLINES
+??LVS_EX_SUBITEMIMAGES
+2.动态创建事件:
+??HDN_ITEMCLICK , LVN_COLUMNCLICK? : 点击某项列表头.
+在该消息中排序
+if (pNMLV->iSubItem == m_list.GetCurrentCol())
+?{
+??//降序¨°
+??m_list.m_bSortASC = !m_list.m_bSortASC;
+?}
+?else
+?{
+??//升序¨°
+??m_list.m_bSortASC = true;
+??m_list.SetCurrentCol(pNMLV->iSubItem);
+?}
+?m_list.SortItems(MyCompareProc, (DWORD)&m_list); 
+
+??NM_KILLFOCUS??? : 离开焦点和时间控件是同一个通知消息码 
+??NM_CUSTOMDRAW :绘制某行颜色, 在响应函数中添加以下代码 
+?*pResult = CDRF_DODEFAULT;
+?map<int, COLORREF>::iterator Itmap;
+?NMLVCUSTOMDRAW * lplvdr=(NMLVCUSTOMDRAW*)pNMHDR;
+?NMCUSTOMDRAW &nmcd = lplvdr->nmcd;
+?COLORREF color = 0;
+?switch(lplvdr->nmcd.dwDrawStage)//判D断?状á??态??
+?{
+?case CDDS_PREPAINT:
+??{
+???*pResult = CDRF_NOTIFYITEMDRAW;
+???break;
+??}
+?case CDDS_ITEMPREPAINT:
+??{
+???int nRow = lplvdr->nmcd.dwItemSpec // int nRow =GetItemData((int)lplvdr->nmcd.dwItemSpec); 
+???Itmap = m_mapColor.find(nRow);
+???if (Itmap != m_mapColor.end())
+???{
+????lplvdr->clrTextBk = Itmap->second;//颜?色|?
+???}
+???*pResult = CDRF_DODEFAULT;? //将这行代码改为*pResult = CDRF_NOTIFYSUBITEMDRAW;则会响应CDDS_SUBITEM | CDDS_ITEMPREPAINT分支代码， 则可以修改某个单元格 
+
+??}
+??break;
+?case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
+break;
+?} 
+
+3.特有函数:
+??(1)? DWORD SetExtendedStyle(DWORD) 设置拓展风格
+???
+??(2) int InsertColumn(int, const char*, int, int, int) 插入一列
+?? 第一个参数: 列的位置, 从0开始计算。
+?? 第二个参数: 列的名称。
+?? 第三个参数: LVCFMT_LEFT、LVCFMT_RIGHT、LVCFMT_CENTER 文字位置
+?? 第四个参数: 列的宽度。
+?? 第五个参数:属于谁的子列， 都不属于填-1
+(6)?BOOL InserItem(int nRow, const char*, int nPicture) 插入某行的第一列
+(7)?BOOL SetItemText(int, int, const char*) 在某行中插入一项文本内容
+使用该函数前， 必须使用InserItem插入某一行的一列
+参数一:行号
+参数二:列号
+参数三:显示文本。
+(5)CString GetItemText(int, int) 获取某项文本。 
+??(3) BOOL SetItem(int, int, UINT, LPCTSTR, int,UINT,UINT, LPARAM ); 插入一项数据
+??第一个参数: 行号， 从0开始计算 
+??第二个参数: 列号， 从0开始计算
+??第三个参数: LVCFMT_LEFT、LVCFMT_RIGHT、LVCFMT_CENTER 文字位置
+??第四个参数:数据
+??第五个参数:该项的图片列表序号， 无图片为0
+??其他参数为NULL
+(8)?BOOL DeleteAllItems();? 清空列表,不能清除列名称。
+(9)?DeleteColumn(int nCol); 清除一列，包括列名称。
+(10)?GetHeaderCtrl()->GetItemCount();? 获取列数, 
+清除所有列，利用循环每次调用DeleteColumn（0） 
+(11)?SetItemState(nRow,LVNI_SELECTED|LVIS_FOCUSED,LVNI_SELECTED|LVIS_FOCUSED)
+设置某行高亮，但之前需要调用SetFocus;
+//移除高亮: SetItemState(m_list.GetSelectionMark(), 0, LVIS_SELECTED | LVIS_FOCUSED); 
+(12)? SetTextColor(Color) //设置整个列表文本色
+(13)? SetTextBkColor(Color) //设置整个列表背景色
+?(8) BOOL SetColumnWidth(int, int); 设置某列宽度
+??? 第一个参数:列号，从0开始计算
+??? 第二个参数:宽度
+(14)?BOOL SortItem(回调函数, 参数);
+回调函数: int CALLBACK MyCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM pList)
+回调参数: 参数一和参数二，是<某行调用SetItemData函数>设置的数据值。数据值还可以是指针，若是指针使用SetItemData函数设置数据必须是堆中的。
+回调返回值: :-1，第一行排在第二行前面, 1第一行排在第二行后面。 
+参数:??? 设置该参数， 可以从回调函数第三个参数得到。 
+在回调函数中使用LVFINDINFO findInfo; 
+?findInfo.flags = LVFI_PARAM; 
+?findInfo.lParam = lParam1; 
+?int iItem1 = pList->FindItem(&findInfo, -1); 
+?findInfo.lParam = lParam2; 
+?int iItem2 = pList->FindItem(&findInfo, -1); 可以得到lParam1和lParam2所在行号,然后再用过GetItemText(iItem1, nCol)获取数据,? 这样SetItemData的第二个参数不会影响到排序结果，一般将这个参数赋值和行号一样就行了。 
+(15)?BOOL SetItemData(int nRow, DWORD_PTR)
+设置某行数据。 若该行因排序发生变化，通过GetItemData获取的数据也会动态发生变化(比如设置SetItemData(1,1)若第二行发生排序到第五行，则GetItemData(1)的结果为4)。 绘制背景色时可以根据GetItemData函数获取排序后的结果， 这样会使某行背景颜色动态随排序变化。
+参数二:可以是地址。 
+(16)? int GetNextItem(-1,LVIS_SELECTED);
+//获取选中的行号,从0开始, 必须只能单选某行才行。
+? 
+(17)?int GetSelectionMark() 
+//获取选中的行号,从0开始, 必须只能单选某行才行。
+(18)? int GetItemCount()
+//获取行的个数。
+I)? Report风格列表插入图片
+?设置某行具有图片，其他行不具有图片:
+CImageList m_Image;
+HICON hIcon;
+?m_Image.Create(16,16,ILC_COLOR,2,20);
+?hIcon = AfxGetApp()->LoadIcon(IDI_ICON1);
+?m_Image.Add(hIcon);?? //增加图片，序号从0开始。 
+?m_list.SetImageList(&m_imList,LVSIL_SMALL);? //列表控件设置图片列表 
+?LVITEM lvItem={0};
+?int n = GetItemCount();
+?CString strt;
+?for (int i = 0; i < n; i++)
+?{
+??
+??lvItem.mask = LVIF_IMAGE|LVIF_TEXT|LVIF_STATE;?//图片，文字，状态
+??lvItem.iItem = i;??//行号
+??
+??lvItem.iSubItem = 0;?//子列号
+??strt = m_list.GetItemText(i,0);
+??lvItem.pszText = strt.GetBuffer(0);
+??if (i == nRowIndex)
+??{
+???lvItem.iImage = 0;?//图片索引号(从0开始)
+??}
+??else
+??{
+???lvItem.iImage = -1;
+??}
+??m_list.SetItem(&lvItem);
+?} 
+8)? CTreeCtrl类(树控件)
+1.风格： 
+? TVS_HASLINES : 父子节点间绘制连线
+??? TVS_LINESATROOT: 表示树控制在根项之间存在连线；
+??? TVS_HASBUTTONS: 表示树控制视在父项左侧存在展开合拢控制按钮；
+?TVS_SHOWSELALWAYS: 当焦点离开树控件时，选中节点变灰
+2.动态创建事件:
+?(1)ON_NOTIFY(TVN_SELCHANGED,控件ID, &CDlgTestDlg::OnSelchangedTree2) //节点选中后的通知消息。
+?响应函数:返回值void,参数NMHDR* pNMHDR, LRESULT* pResult。
+?SelectItem函数会触发该通知消息。
+3.特有函数:
+??(1) HTREEITEM InsertItem(const char*, int, int, HTREEITEM, HTREEITEM) 插入一个节点
+??第一个参数: 插入节点的文本
+??第二个参数: 未选中该节点显示的图片序号(CImageList)
+第三个参数: 选中该节点显示的图片序号(CImageList)
+第四个参数: 父节点， 默认值是根节点(TVI_ROOT)
+?第五个参数: 插入节点的位置，默认值:兄弟节点的最下面(TVI_LAST),
+?TVI_SORT：排序 ?TVI_FIRST:放在兄弟节点最上面
+??返回值;节点
+??(2) BOOL Expand(HTREEITEM, int) 让某个节点展开
+???第二个参数: TVE_EXPAND 展开
+??(3) BOOL DeleteItem(HTREEITEM) 删除某个节点
+??(4) BOOL DeleteAllItems() 删除所有节点
+??(5) CString? GetItemText(HTREEITEM) 获取某个节点的文本
+??(6)SHORT SetItemHeight(SHORT) 设置每个叶子节点的间隔。
+??(7) HTREEITEM? GetSelectedItem() 获取选中的某个节点
+??(8) BOOL SetItemData(HTREEITEM, DWORD) 设置某个节点附加数据
+??(9)DWORD GetItemData(HTREEITEM ) 获取某个节点的附加数据
+???如果之前没设置， 则返回值0
+??(10) BOOL SelectItem(HTREEITEM) 设置选中当前节点， 成功非0。
+??(11)BOOL ItemHasChildren(HTREEITEM)判断某个节点是否有孩子节点，成功非0
+??(12) HTREEITEM? GetChildItem(HTREEITEM) 返回值是某个节点的第一个孩子节点。
+??(13) HTREEITEM? GetNextItem (HTREEITEM, UINT) 获得某个节点的兄弟节点
+???第二个参数: TVGN_NEXT 下一个兄弟节点
+??(14) HTREEITEM? GetRootItem()获取根节点
+??? （15）BOOL Select(HTREEITEM, UINT); 设置某个节点的高亮
+??m_tree.Select(m_tree.GetSelectedItem(), TVGN_CARET);
+??m_tree.Select(m_tree.GetSelectedItem(), TVGN_DROPHILITE);
+??在焦点离开树的消息响应函数中调用以及在节点切换的消息响应函数中调用。 
+??
+9)? CImageList类(图片列表)
+1.风格： 
+2.动态创建事件:
+?
+3.特有函数:
+?(1) BOOL Create(UINT, int, int, COLORREF) 创建位图
+??第一个参数: 位图ID
+??第二个参数: 图像宽度
+??第三个参数: 图像列表可控制的图像数量。
+??第四个参数: RGB(255,255,255) 颜色屏蔽位
+?(2)BOOL Create(int, int, UINT, int, int) 创建外来的位图
+??第一个参数: 图像宽度
+??第二个参数: 图像高度
+???? 第三个参数: ILC_MASK|ILC_COLOR32
+??第四个参数: 图像列表包含的图像数量
+??第五个参数: 图像列表可控制的图像数量。
+?(3) int Add(HICON) 增加一张图片
+??参数:通过 LoadImage(AfxGetInstanceHandle(),
+strIcoName, //图片名称(路径+名称IMAGE_ICON,0,0,LR_DEFAULTCOLOR|LR_DEFAULTSIZE|LR_LOADFROMFILE)的返回值。
+??返回值：图片序号，可用于Tree,List中。从0开始计算。 
+10)?CScrollbar类(滚动条)
+1.风格： 
+2.动态创建事件:
+3.特有函数:
+?(1)void SetScrollRange(int, int, BOOL) 设置滚动条的范围
+??第一个参数: 小0
+??第二个参数: 大100,若为0，滚动条不显示。
+??第三个参数:默认值TRUE,是否重画
+?(2) int GetScrollPos( )获取滚动条当前位置。
+?(3) int GetScrollLimit()获取滚动条(最大范围值+1)。
+??例如：设置SetScrollRange(0,100),则返回值为101。
+(4)?int SetScrollPos( int nPos, BOOL bRedraw = TRUE );设置滚动条的位置 
+?(5) void SetScrollInfo(LPSCROLLINFO); //通过使用该函数能是固定大小对话框中动态创建无数控件。
+?? 参数: 结构中必须填cbSize =? sizeof(SCROLLINFO),fMask? =? SIF_ALL;
+?? 页大小设置(滑块大小设置),不足一页大小就不显示滚动条。
+?????? 如果滚动条控件长度和窗口大小一样(也就是一页的大小):滚动条范围和窗口大小比例一致,以及ScrollWindow滚动的大小比例一致。
+SCROLLINFO?? si;
+?si.cbSize =? sizeof(SCROLLINFO);? 
+?si.fMask? =? SIF_ALL;
+?si.nMin?? =? 0;? 
+?si.nPage? =? 310; 
+?si.nMax?? =? nSize * 50 / 2;
+?si.nPos?? =? 0;? 
+?SetScrollInfo(SB_VERT, &si); 
+? 
+
+11)?CProgressCtrl类(进度条) 
+1.风格： 
+2.动态创建事件:
+3.特有函数:
+(1) int SetPos(int) 设置当前进度(%)
+12)?CTabCtrl类(标签控件)
+3.?风格： 
+设置标签文本居中: Fixed Width
+2.动态创建事件:
+?(1)Tab页切换的通知消息TCN_SELCHANGE, 只有用户切换时才发生。
+3.特有函数:
+?(1)LONG InsertItem(int, const char*) 插入一个Tab标签
+?参数一:位置，从0开始
+?参数二:名称
+?(2)BOOL DeleteItem(int) 删除指定标签
+??参数一 ：位置,从0 开始
+(3)BOOL DeleteAllItems() 删除所有标签
+(4)int GetCurSel() //获取当前选择标签位置，从0开始
+(5)BOOL SetCurSel(int) 设置当前标签位置，从0开始
+(6) HighlightItem设置某个Tab标签高亮。 
+4.使用例子:
+? 例子一: 获取与strFileName相同的标签文本
+?TCITEM tcItem;
+?char buffer[256] = {0};
+?int i = 0;
+?for (i = 0; i < m_tab.GetItemCount(); i++)
+?{
+??memset(buffer, 0, 256);
+??tcItem.pszText = buffer;
+??tcItem.cchTextMax = 256;
+??tcItem.mask = TCIF_TEXT;
+??m_tab.GetItem(i, &tcItem);
+??if (!strcmp(tcItem.pszText,strFileName) )
+??{
+???return;
+??}
+?}
+13)?CIPAddressCtrl (地址控件类)
+1.风格： 
+2.动态创建事件:
+3.特有函数:
+(1) SetAddress(BYTE,BYTE,BYTE,BYTE) 设置界面上控件值(从左到右)，? 参数也可:DWORD 
+
+
+
+
+
+
+
+
+
+
+
+
+? 
+
+?
+
+
+
+
+
+
+
+
+六、?WM消息
+1)? WM_SYSCOMMAND 系统菜单命令命令消息。
+介绍: wParam参数是命令类型: SC_CLOSE(关闭菜单，或关闭按钮), SC_MOVE(移动窗口，但是需要点击菜单中的“移动“再移动窗口才能触发), SC_MINIMIZE(最小化),SC_MAXIMIZE(最大化) 
+使用: 
+2)? WM_SETICON 设置一个窗口的图标
+介绍: 
+使用:
+??示例一:
+?HICON hIcon = LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_ICON1));
+?PostMessage(HWND,WM_SETICON, 0, (LPARAM)hIcon); 
+3)? WM_SETCURSOR 设置光标
+介绍: 
+使用:
+示例一: 
+/*HCURSOR m_hCursor = LoadCursor(NULL,IDC_CROSS)//添加系统光标*/
+HCURSOR m_hCursor = AfxGetApp()->LoadCursor(IDC_CURSOR1);//增加自定义光标
+在响应函数中:
+?if (m_hCursor != NULL)? //满足何种条件则显示光标
+?{
+??SetCursor(m_hCursor);
+???return TRUE; //记得返回TRUE，不传递该消息
+?}
+?return CDialog::OnSetCursor(pWnd, nHitTest, message); 
+4)? WM_KILLFOCUS 删除某个控件（窗口）的焦点
+介绍: 
+使用:
+? ::SendMessage(GetDlgItem(要失去焦点的控件名)-> m_hWnd,WM_KILLFOCUS,-1,0); 
+5)? WM_TIMER 定时器消息
+介绍: 
+?OnTimer响应函数参数是定时器ID, 可以根据不同ID来区分SetTimer和KillTimer。
+使用:
+?第一步:添加消息映射
+?第二步:添加消息响应函数, 若回调函数为NULL,则调用默认的OnTimer(定时器ID)
+?第三步:添加SetTimer(定时器ID,时间间隔毫秒,回调函数);? 返回值也是定时器ID。
+??? 第四步:删除定时器 KillTimer(定时器ID); 
+6)? WM_DRAWITEM 控件重画的发出该消息
+介绍:? 
+?wParam参数:? 控件ID,? 若是菜单则是0。
+lParam 参数:? DRAWITEMSTRUCT结构的指针， 为需要自绘按钮或菜单提供了必要的信息。
+需要重绘的控件必须指定BS_OWNERDRAW属性, 指定才会发出该消息。
+使用:
+7)? WM_PAINT 绘图消息
+介绍: 
+?OnPaint是可以响应WM_PAINT消息的函数，OnDraw是专门的响应WM_PAINT的消息映射函数，在视图类中OnPaint函数中调用了OnDraw函数,一般用户写的程序放入OnDraw中。
+应用:
+8)? WM_CTLCOLOR 绘制背景色
+介绍:
+?针对没有SetBkColor成员函数的背景绘制,就是不能绘制按钮的背景色。
+应用:
+?在响应函数OnCtlColor中:
+?if (pWnd->GetDlgCtrlID() == IDC_STATIC_COLOR)
+?{
+??pDC->SetBkMode(TRANSPARENT);//设置透明输出
+??//pDC->SetTextColor(RGB(255,0,0));//设置文本颜色
+??return? CreateSolidBrush(RGB(255,0,0)); //指定颜色
+?}
+?或者:
+?if (nCtlColor == CTLCOLOR_STATIC)
+?{
+??pDC->SetBkMode(TRANSPARENT);
+??return? CreateSolidBrush(RGB(0,255,0));
+?}
+CTLCOLOR_STATIC: (1)单选按钮,(2)静态框,背景色
+CTLCOLOR_LISTBOX: (1)组合框的下拉列表风格中， 只有列表本身变色，组合框不变色。
+9)? WM_VSCROLL 垂直滚动条消息
+介绍:
+响应函数onVScroll(nSBCode, nPos, pScrollBar):
+参数一: 
+SB_LINEDOWN: //向下移动一行?? SB_LINEUP:?? //向上移动一行
+SB_PAGEDOWN: //向下移动一页(鼠标点击滑块与下箭头的按钮之间的空白处)
+SB_PAGEUP:?? //向上移动一页
+SB_THUMBPOSITION: //鼠标拖至一块区域停止后的位置
+SB_THUMBTRACK: //鼠标拖至一块区域过程中产生的
+参数二: 只有在SB_THUMBPOSITION和SB_THUMBTRACK中才有用
+应用:
+在响应函数中使用:
+int nMaxPos = GetScrollLimit(SB_VERT) /*- 1*/;? //获?取¨?当ì?à前??最á?大?¨?值|ì
+?int nCurrentPos = GetScrollPos(SB_VERT);
+?int nMovePos = 0;? //每次滚动的距离
+?switch(nSBCode)
+?{
+?case SB_LINEDOWN://鼠o¨?标à¨o单ì￡¤击??滚?动?￥条??下?面?箭y头a?¤
+??nMovePos = nCurrentPos > nMaxPos - 10 ? nMaxPos - nCurrentPos : 10;
+??break;
+?case SB_LINEUP://鼠o¨?标à¨o单ì￡¤击??滚?动?￥条??上|?面?箭y头a?¤
+??nMovePos? = nCurrentPos < 10 ? -nCurrentPos : -10;
+??break;
+?case SB_THUMBPOSITION://鼠o¨?标à¨o拖a?动?￥滚?动?￥条??
+??nMovePos = nPos - nCurrentPos;
+??break;
+?case SB_THUMBTRACK:
+??nMovePos = nPos - nCurrentPos;
+??break;
+?case SB_PAGEDOWN://鼠o¨?标à¨o单ì￡¤击??滚?动?￥条??下?面?空?白??á处?|
+??nMovePos = nCurrentPos > nMaxPos-nMaxPos/10 ? nMaxPos - nCurrentPos : nMaxPos/10;
+??break;
+?case SB_PAGEUP://鼠o¨?标à¨o单ì￡¤击??滚?动?￥条??上|?面?空?白??á处?|
+??nMovePos = nCurrentPos < nMaxPos/10 ? -nCurrentPos : -nMaxPos/10;
+??break;
+?default:
+??break;
+?} 
+?SetScrollPos(SB_VERT, nCurrentPos + nMovePos);
+?ScrollWindow(0, -nMovePos); 
+10)?WM_MOUSEWHEEL 鼠标垂直滚动
+介绍: 
+??? 响应函数OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+参数一: MK_MBUTTON
+参数二: HIWORD(pMsg->wParam
+参数三:0
+11)?WM_ERASEBKGND 绘制背景消息
+12)? 
+
+6.2? 虚函数
+1)?OnChildNotify该虚函数用于重写控件设置背景色文本色等。
+HDC hdcChild = (HDC)wParam;
+?SetBkColor(hdcChild, RGB(255,0,0))
+?return TRUE;
+如果返回return CEdit::OnChildNotify(message, wParam, lParam, pLResult);则清除背景色 
+2)?PreTranslateMessage虚函数
+该函数只接受PostMessage的消息，不接收SendMessage消息
+if (WM_MOUSEWHEEL == pMsg->message)
+?{return TRUE; //TRUE不响应该消息， FLASE响应}
+?该函数不接收通知消息， 使用窗口过程去接收通知消息。
+6.3? 处理消息的顺序
+1)?应用程序处理消息顺序
+1.AfxWndProc()????? 该函数负责接收消息，找到消息所属的CWnd对象，然后调用AfxCallWndProc
+2.AfxCallWndProc() 该函数负责保存消息(保存的内容主要是消息标识符和消息参数)供应用程序以后使用，
+??????????????????? 然后调用WindowProc()函数
+3.WindowProc()????? 该函数负责发送消息到OnWndMsg()函数，如果未被处理，则调用DefWindowProc()函数
+4.OnWndMsg()??????? 该函数的功能首先按字节对消息进行排序，对于WM_COMMAND消息，调用OnCommand()消息响应函数，对于WM_NOTIFY消息调用OnNotify()消息响应函数。任何被遗漏的消息将是一个窗口消息。OnWndMsg()函数搜索类的消息映像，以找到一个
+?能处理任何窗口消息的处理函数。如果OnWndMsg()函数不能找到这样的处理函数的话，则把消息返回到WindowProc()函数，由它将消息发送给DefWindowProc()函数
+5.OnCommand()?????? 该函数查看这是不是一个控件通知(lParam参数不为NULL，如果lParam参数为空的话，说明该消息不是控件通知)，如果它是，OnCommand()函数会试图将消息映射到制造通知的控件；如果他不是一个控件通知(或者如果控件拒绝映射的消息)OnCommand()就会调用OnCmdMsg()函数
+6.OnCmdMsg()??????? 根据接收消息的类，OnCmdMsg()函数将在一个称为命令传递(Command Routing)的过程中潜在的传递命令消息和控件通知。例如：如果拥有该窗口的类是一个框架类，则命令和通知消息也被传递到视图和文档类，并为该类寻找一个消息处理函数 
+2)?应用程序创建窗口的过程的顺序
+1.PreCreateWindow()?? 该函数是一个重载函数，在窗口被创建前，可以在该重载函数中改变创建参数(可以设置窗口风格等等)
+2.PreSubclassWindow() 这也是一个重载函数，允许首先子分类一个窗口
+3.OnGetMinMaxInfo()?? 该函数为消息响应函数，响应的是WM_GETMINMAXINFO消息，允许设置窗口的最大或者最小尺寸
+4.OnNcCreate()??????? 该函数也是一个消息响应函数，响应WM_NCCREATE消息，发送消息以告诉窗口的客户区即将被创建
+5.OnNcCalcSize()????? 该函数也是消息响应函数,响应WM_NCCALCSIZE消息，作用是允许改变窗口客户区大小
+6.OnCreate()????????? 该函数也是一个消息响应函数，响应WM_CREATE消息，发送消息告诉一个窗口已经被创建
+7.OnSize()??????????? 该函数也是一个消息响应函数，响应WM_SIZE消息，发送该消息以告诉该窗口大小已经发生变化
+8.OnMove()??????????? 消息响应函数，响应WM_MOVE消息，发送此消息说明窗口在移动
+9.OnChildNotify()???? 该函数为重载函数，作为部分消息映射被调用，告诉父窗口即将被告知一个窗口刚刚被创建
+3)?应用程序打开窗口顺序(非模态)
+1.PreSubclassWindow()??? 重载函数，允许用户首先子分类一个窗口
+2.OnCreate()???????????? 消息响应函数，响应WM_CREATE消息，发送此消息以告诉一个窗口已经被创建
+3.OnSize()?????????????? 消息响应函数，响应WM_SIZE消息，发送此消息以告诉窗口大小发生变化
+4.OnMove()?????????????? 消息响应函数，响应WM_MOVE消息，发送此消息以告诉窗口正在移动
+5.OnSetFont()??????????? 消息响应函数，响应WM_SETFONT消息，发送此消息以允许改变对话框中控件的字体 
+? 
+4)?应用程序关闭窗口顺序(非模态)
+1.OnClose()?????? 消息响应函数，响应窗口的WM_CLOSE消息，当关闭按钮被单击的时候发送此消息
+2.OnDestroy()???? 消息响应函数，响应窗口的WM_DESTROY消息，当一个窗口将被销毁时，发送此消息
+3.OnNcDestroy()?? 消息响应函数，响应窗口的WM_NCDESTROY消息，当一个窗口被销毁后发送此消息
+4.PostNcDestroy() 重载函数，作为处理OnNcDestroy()函数的最后动作，被CWnd调用 
+
+5)?应用程序打开窗口顺序(模态)
+1.DoModal()???????????? 重载函数，重载DoModal()成员函数
+2.PreSubclassWindow()?? 重载函数，允许首先子分类一个窗口
+3.OnCreate()??????????? 消息响应函数，响应WM_CREATE消息，发送此消息以告诉一个窗口已经被创建
+4.OnSize()????????????? 消息响应函数，响应WM_SIZE消息，发送此消息以告诉窗口大小发生变化
+5.OnMove()????????????? 消息响应函数，响应WM_MOVE消息，发送此消息，以告诉窗口正在移动
+6.OnSetFont()?????????? 消息响应函数，响应WM_SETFONT消息，发送此消息，以允许改变对话框中控件的字体
+7.OnInitDialog()??????? 消息响应函数，响应WM_INITDIALOG消息，发送此消息以允许初始化对话框中的控件，或者是创建新控件
+8.OnShowWindow()??????? 消息响应函数，响应WM_SHOWWINDOW消息，该函数被ShowWindow()函数调用
+9.OnCtlColor()????????? 消息响应函数，响应WM_CTLCOLOR消息，被父窗口发送已改变对话框或对话框上面控件的颜色
+10. OnChildNotify()???? 重载函数，作为WM_CTLCOLOR消息的结果发送 
+
+6)?应用程序关闭窗口顺序(模态)
+1.OnClose()??????? 消息响应函数，响应WM_CLOSE消息，当"关闭"按钮被单击的时候，该函数被调用
+2.OnKillFocus()??? 消息响应函数，响应WM_KILLFOCUS消息，当一个窗口即将失去键盘输入焦点以前被发送
+3.OnDestroy()????? 消息响应函数，响应WM_DESTROY消息，当一个窗口即将被销毁时，被发送
+4.OnNcDestroy()??? 消息响应函数，响应WM_NCDESTROY消息，当一个窗口被销毁以后被发送
+5.PostNcDestroy() 重载函数，作为处理OnNcDestroy()函数的最后动作被CWnd调用 
+? 
+
+
+
+?一、??? 5.2?? 句柄相关函数
+1)???????? CWnd::FromHandle
+功能: 根据HWND获取CWND* 
+(in)参数(HWND)一: 
+返回值(CWnd*): 
+2)???????? CWnd::GetSafeHwnd
+功能: 获取一个窗口对象的HWND。若使用CWnd->m_hWnd获取到的HWND， 可能CWnd窗口不存在，则出现错误。 
+无参数: 
+返回值(HWND):窗口对象不存在返回NULL。 
+3)???????? CWnd::GetParent
+功能: 获取父类的窗口类对象。 
+无参数: 
+返回值(CWnd*):父类窗口对象指针 
+4)???????? CWnd::GetDlgItem
+功能: 根据控件ID获取控件的窗口对象。 
+(in)参数(int)一: 控件id。 
+返回值:窗口对象指针。 
+5)???????? AfxGetMainWnd
+功能: 若是OLE服务器，返回应用程序的活动主窗口指针。否则与m_pMainWnd等价。 
+无参数: 
+返回值(CWnd*): 
+6)???????? AfxGetApp
+功能:获取当前进程的指针。在MFC文档架构中，获取应用程序类的指针。如获取应用程序类中的成员变量(主窗口CWnd* AfxGetApp()->m_pMainWnd)。 因此，一般将全局变量及全局函数都放入应用程序类中。 
+无参数: 
+返回值(CWinApp*): 
+7)???????? AfxGetThread
+功能: 返回当前的线程,若只有一个界面线程在运行， 等同AfxGetApp。 
+AfxGetThread()->m_nThreadID。 
+无参数: 
+返回值(CWinThread*): 
+8)???????? AfxGetInstanceHandle
+功能:返回应用程序实例句柄。 
+无参数: 
+返回值(HINSTANCE): 
+9)???????? AfxGetResourceHandle
+功能:返回应用程序默认的资源句柄 
+无参数: 
+返回值(HINSTANCE): 
+5.3?? 窗口相关函数1)???????? WindowFromPoint
+功能: 根据鼠标位置获取窗口句柄。 
+(in)参数(POINT)一: 鼠标位置, (相对屏幕) 
+返回值(HWND): 包含该点的窗口的句柄。如果包含指定点的窗口不存在，返回值为NULL。如果该点在静态文本控件之上，返回值是在该静态文本控件的下面的窗口的句柄。不获取隐藏或禁止的窗口句柄，即使点在该窗口内。 
+2)???????? ChildWindowFromPoint
+功能: 根据鼠标位置获取窗口句柄。能获取隐藏或禁止的窗口句柄。 
+(in)参数(HWND)一: 父窗口句柄 
+(in)参数(LONG)二:X 
+(in)参数(LONG)三:Y 
+返回值(HWND): 指定点的第一个子窗口的句柄。如未发现任何窗口，则返回父窗口句柄。如指定点位于父窗口外部，则返回零。 
+3)???????? GetActiveWindow
+功能: 获取当前活动窗口。 
+无参数: 
+返回值(HWND): 
+4)???????? ::GetWindow
+功能: 获取指定窗口的相关窗口句柄 
+(in)参数(HWND)一:准备获取该窗口的其他窗口句柄 
+(in)参数(UINT)二:标识。GW_CHILD:该窗口子类的窗口句柄。GW_HWNDNEXT通过获取该窗口兄弟窗口句柄，根据Tab号顺序。 
+返回值(HWND):Tab编号最前面的句柄 
+5)???????? ::GetNextWindow
+功能:获取某个窗口的下一个或上一个窗口。一般用于遍历某个窗口所有控件。 
+(in)参数(HWND)一:需要获取某个窗口的句柄。 
+(in)参数(UINT)二:标识。GW_HWNDNEXT获取下一个，GW_HWNDPREV上一个。根据Tab号顺序。 
+返回值(HWND):得到上一个或下一个窗口句柄。 
+6)??????? :: GetClassName
+功能: 通过窗口句柄获取该窗口类的类名称 
+(in)参数(HWND)一:窗口句柄 
+(out)参数(char*)二;存放类名的缓冲区 
+(in)参数(int)三;缓冲区长度 
+返回值(int):存放到缓冲区的个数， 失败则为0。 
+7)??????? IsWindow
+功能:判断窗口是否创建。 
+(in)参数(HWND):窗口句柄 
+返回值(BOOL): 窗口未创建或销毁，返回0，? 否则返回1。 
+? 
+5.4?? 窗口重绘相关函数1)???????? CWnd::UpdateWindow
+功能: 立即重绘窗口，类似于SendMessag WM_PAINT消息 
+无参数: 
+返回值（BOOL）:成功非0。 
+2)???????? CWnd::Invalidate
+功能: 不立即重绘窗口，类似于PostMessage WM_PAINT。 
+(in)参数(BOOL)一: 
+????????????? 返回值(BOOL): 成功非0。 
+3)???????? CWnd::RedrawWindow
+功能: RedrawWindow(0,0,RDW_ERASconst USHORT MEMUNIT_ALIGNMENT = 2;
+class CMemoryPool
+{
+public:
+CMemoryPool(USHORT nUnitSize, USHORT nInitSize = 1024, USHORT nGrowSize = 256);
+virtual ~CMemoryPool(void);
+public:
+void* Alloc();
+void Free(void* p);
+private:
+CMemoryBlock*    m_pHeadBlock;  //第一个内存块指针。
+USHORT            m_usUnitSize;  //内存块中内存单元大小
+USHORT            m_usInitSize;  //第一个内存块包含的内存单元个数
+USHORT            m_usGrowSize;  //非第一个内存块包含的内存单元个数
+};
+
+E|RDW_INVALIDATE);。 
+(in)参数一: 
+(in)参数二: 
+(in)参数三: 
+返回值: 
+
+
+
