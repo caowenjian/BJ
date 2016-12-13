@@ -26,9 +26,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -68,7 +69,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;UTILITY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;UTILITY_EXPORTS;UTILITY_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -85,6 +86,7 @@
     <ClInclude Include="APIOther.h" />
     <ClInclude Include="APISrcCoding.h" />
     <ClInclude Include="APIThread.h" />
+    <ClInclude Include="Exception.h" />
     <ClInclude Include="FileReader.h" />
     <ClInclude Include="EventBase.h" />
     <ClInclude Include="IEventManager.h" />
@@ -101,6 +103,7 @@
     <ClCompile Include="APIOther.cpp" />
     <ClCompile Include="APISrcCoding.cpp" />
     <ClCompile Include="APIThread.cpp" />
+    <ClCompile Include="Exception.cpp" />
     <ClCompile Include="FileReader.cpp" />
     <ClCompile Include="IEventManager.cpp" />
     <ClCompile Include="IThreadManager.cpp" />

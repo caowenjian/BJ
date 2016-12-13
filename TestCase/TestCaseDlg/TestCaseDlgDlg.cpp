@@ -17,6 +17,7 @@
 #include "../utility/IModuleSubjectBase.h"
 #include "../utility/IEventManager.h"
 #include "../utility/IThreadManager.h"
+#include "../utility/Exception.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -315,13 +316,31 @@ VOID Fun1()
 // 
 // 	}
 }
+
+class CA
+{
+public:
+	int a;
+};
 void CTestCaseDlgDlg::OnBnClickedButton1()
 {
 	// TODO:  在此添加控件通知处理程序代码
-// 	BOOL b = utility::IsIncludeChinese("a中国a");
-// 	std::wstring ss = _T("123dfs中df国dsf人");
-// 	std::string str = utility::WStringToString(ss);
-// 	CString sss = utility::StringToCString(str);
+	BOOL ba = utility::IsIncludeChinese("a中国a");
+ 	std::wstring ss = _T("a中国");
+	int xx = ss.length();
+ 	std::string str = utility::WStringToString(ss,CP_ACP);
+
+ 	CString sss = utility::StringToCString(str,CP_ACP);
+
+	utility::InitException();
+
+	
+	std::map<int,int> mm;
+	mm[10] = 5;
+	mm[11] = 6;
+	mm[12] = 4;
+	mm[13] = 7;
+	mm.erase(100);
 // 	CString ssAP = utility::GetAppPath();
 // 	CString strsize = utility::ByteSizeToString(1234000000);
 //	CChild *cc = new CChild;

@@ -23,7 +23,7 @@ UTILITY_API BOOL IsIncludeChinese(IN CONST std::string& strChs);
  // Date: 2016/03/16
  // Returns: UTILITY_API std::string
  // Parameter: src
- // Parameter: codepage
+ // Parameter: codepage: CP_UTF8编码:占3字节, CP_ACP(unicode编码):占2字节
  // History:
  *************************************************/
 UTILITY_API std::string	CStringToString(IN CONST CString& src, UINT codepage = CP_UTF8);
@@ -36,7 +36,7 @@ UTILITY_API std::string	CStringToString(IN CONST CString& src, UINT codepage = C
  // Date: 2016/03/16
  // Returns: UTILITY_API CString
  // Parameter: src
- // Parameter: codepage
+ // Parameter: codepage: CP_UTF8编码:占3字节, CP_ACP(unicode编码):占2字节
  // History:
  *************************************************/
 UTILITY_API CString	StringToCString(IN CONST std::string& src, UINT codepage = CP_UTF8);
@@ -50,7 +50,7 @@ UTILITY_API CString	StringToCString(IN CONST std::string& src, UINT codepage = C
  // Date: 2016/03/16
  // Returns: UTILITY_API std::wstring
  // Parameter: src
- // Parameter: codepage
+ // Parameter: codepage: CP_UTF8编码:占3字节, CP_ACP(unicode编码):占2字节
  // History:
  *************************************************/
 UTILITY_API std::wstring StringToWString(IN CONST std::string& src, UINT codepage = CP_UTF8);
@@ -62,7 +62,7 @@ UTILITY_API std::wstring StringToWString(IN CONST std::string& src, UINT codepag
  // Date: 2016/03/16
  // Returns: UTILITY_API std::string
  // Parameter: src
- // Parameter: codepage
+ // Parameter: codepage: CP_UTF8编码:占3字节, CP_ACP(unicode编码):占2字节
  // History:
  *************************************************/
 UTILITY_API std::string	WStringToString(IN CONST std::wstring& src, UINT codepage = CP_UTF8);
