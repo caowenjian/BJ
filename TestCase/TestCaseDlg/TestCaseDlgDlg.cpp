@@ -18,6 +18,7 @@
 #include "../utility/IEventManager.h"
 #include "../utility/IThreadManager.h"
 #include "../utility/Exception.h"
+/*#include "../utilityLibrary/ISocketManager.h"*/
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -325,6 +326,10 @@ public:
 void CTestCaseDlgDlg::OnBnClickedButton1()
 {
 	// TODO:  在此添加控件通知处理程序代码
+
+
+	
+/*
 	BOOL ba = utility::IsIncludeChinese("a中国a");
  	std::wstring ss = _T("a中国");
 	int xx = ss.length();
@@ -335,15 +340,16 @@ void CTestCaseDlgDlg::OnBnClickedButton1()
 	utility::InitException();
 
 	
+
 	std::map<int,int> mm;
 	mm[10] = 5;
 	mm[11] = 6;
 	mm[12] = 4;
 	mm[13] = 7;
-	mm.erase(100);
+	mm.erase(100);*/
 // 	CString ssAP = utility::GetAppPath();
 // 	CString strsize = utility::ByteSizeToString(1234000000);
-//	CChild *cc = new CChild;
+	CChild *cc = new CChild;
 	int i = 0;
 	i = network::InitWinSocket();
 // 	sockaddr_in in;

@@ -5,6 +5,8 @@
 #include "stdafx.h"
 #include "TestCaseDlg.h"
 #include "TestCaseDlgDlg.h"
+#include "../utilityLibrary/ISocketManager.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -35,6 +37,11 @@ CTestCaseDlgApp theApp;
 
 
 // CTestCaseDlgApp 初始化
+unsigned int __stdcall StartSocket(void* threadArgu)
+{
+	utilityLibrary::GetInstance().StartSelectLoop();
+	return 0;
+}
 
 BOOL CTestCaseDlgApp::InitInstance()
 {
@@ -68,7 +75,17 @@ BOOL CTestCaseDlgApp::InitInstance()
 	// TODO:  应适当修改该字符串，
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+	/********************************************************************************************************/
+	unsigned int m_dwThreadID;
 
+	(HANDLE)_beginthreadex(0, 0, StartSocket, 0, 0, (unsigned*)&m_dwThreadID);
+	std::wstring sip = _T("localhost");
+	std::string striPhone = CStringA(_T("192.168.50.139"));
+	utilityLibrary::GetInstance().Connect(striPhone.c_str(), 8000);
+
+	//utilityLibrary::ISocketManager.Connect(striPhone, 8000);
+
+	/********************************************************************************************************/
 	CTestCaseDlgDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();

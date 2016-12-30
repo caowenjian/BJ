@@ -1,23 +1,23 @@
 #ifndef GLOBALDEFINE_H__
 #define GLOBALDEFINE_H__
 
-#include <afxwin.h>
 #include <string>
 #include <list>
 #include <map>
 #include <vector>
+#include <WinSock2.h>
+#pragma comment (lib, "ws2_32.lib")
 
-
-#ifndef UTILITY_DLL
-#define UTILITY_API			__declspec( dllimport )
-#define UTILITY_CLASS		__declspec( dllimport )
+#ifndef UTILITYLIBRARY_DLL
+#define UTILITYLIBRARY_API			__declspec( dllimport )
+#define UTILITYLIBRARY_CLASS		__declspec( dllimport )
 #else
-#define UTILITY_API			__declspec( dllexport )
-#define UTILITY_CLASS		__declspec( dllexport )
+#define UTILITYLIBRARY_API			__declspec( dllexport )
+#define UTILITYLIBRARY_CLASS		__declspec( dllexport )
 #endif
 
-#define NAMESPACE_BEGIN(n)		namespace n {
-#define NAMESPACE_END(n)		}
+#define NAMESPACE_BEGIN_T(n)		namespace n {
+#define NAMESPACE_END_T(n)		}
 
 
 
@@ -44,20 +44,20 @@
 
 
 
-/*
-typedef void			   VT_VOID;
-typedef signed char        VT_CHAR;
-typedef signed char        VT_INT8;
-typedef short              VT_INT16;
-typedef int                VT_INT32;
-typedef long long          VT_INT64;
-typedef unsigned char      VT_UINT8;
-typedef unsigned char      VT_UCHAR;
-typedef unsigned short     VT_UINT16;
-typedef unsigned int       VT_UINT32;
-typedef unsigned long long VT_UINT64;
-typedef bool VT_BOOL;
+
+typedef void			   VTT_VOID;
+typedef char			   VTT_CHAR;
+typedef signed char        VTT_INT8;
+typedef short              VTT_INT16;
+typedef int                VTT_INT32;
+typedef long long          VTT_INT64;
+typedef unsigned char      VTT_UINT8;
+typedef unsigned char      VTT_UCHAR;
+typedef unsigned short     VTT_UINT16;
+typedef unsigned int       VTT_UINT32;
+typedef unsigned long long VTT_UINT64;
+typedef bool VTT_BOOL;
 const bool C_TRUE = true;
 const bool C_FALSE = false;
-typedef SOCKET VT_SOCKET;*/
+typedef SOCKET VTT_SOCKET;
 #endif
