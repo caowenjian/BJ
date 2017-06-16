@@ -7,6 +7,7 @@
 #include "TestCaseDlgDlg.h"
 #include "../utilityLibrary/ISocketManager.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -76,6 +77,7 @@ BOOL CTestCaseDlgApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 	/********************************************************************************************************/
+	
 	unsigned int m_dwThreadID;
 
 	(HANDLE)_beginthreadex(0, 0, StartSocket, 0, 0, (unsigned*)&m_dwThreadID);

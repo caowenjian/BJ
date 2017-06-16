@@ -321,14 +321,31 @@ VOID Fun1()
 class CA
 {
 public:
-	int a;
+	static void FunS()
+	{
+		MessageBox(NULL, _T("Static"), _T("Static") ,0);
+	}
+	virtual void FunV()
+	{
+		MessageBox(NULL, _T("Virtual"), _T("Virtual") ,0);
+	}
+	void Fun(int i, char c)
+	{
+		MessageBox(NULL, _T("Member"), _T("Member") ,0);
+	}
 };
 void CTestCaseDlgDlg::OnBnClickedButton1()
 {
 	// TODO:  在此添加控件通知处理程序代码
 
-
+	std::map<int,int> mm;
+	std::map<int,int>::iterator itMap;
+	mm[10] = 5;
+	mm[11] = 6;
+	mm[12] = 4;
+	mm[13] = 7;
 	
+
 /*
 	BOOL ba = utility::IsIncludeChinese("a中国a");
  	std::wstring ss = _T("a中国");
@@ -341,12 +358,7 @@ void CTestCaseDlgDlg::OnBnClickedButton1()
 
 	
 
-	std::map<int,int> mm;
-	mm[10] = 5;
-	mm[11] = 6;
-	mm[12] = 4;
-	mm[13] = 7;
-	mm.erase(100);*/
+	*/
 // 	CString ssAP = utility::GetAppPath();
 // 	CString strsize = utility::ByteSizeToString(1234000000);
 	CChild *cc = new CChild;

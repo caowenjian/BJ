@@ -3,7 +3,7 @@
 
 CBaseSocket::CBaseSocket()
 {
-
+	m_busy = TRUE;
 }
 CBaseSocket::~CBaseSocket()
 {
@@ -121,7 +121,7 @@ VTT_INT32 CBaseSocket::Send(VTT_VOID* pBuf, VTT_INT32 i32Length)
 	{
 		m_out_buf.Write((char*)pBuf + offset, i32Remain);
 		m_busy = true;
-		LOG__(NET,  _T("send busy, remain=%d"), m_out_buf.GetWriteOffset());
+		//LOG__(NET,  _T("send busy, remain=%d"), m_out_buf.GetWriteOffset());
 	}
 	return i32Length;
 }

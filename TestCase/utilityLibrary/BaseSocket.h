@@ -39,7 +39,7 @@ private:
 	std::string m_strLocalIP;
 	VTT_UINT16 m_usRemotePort;
 	VTT_UINT16 m_usLocalPort;
-
+	BOOL  m_busy;
 	UINT8  m_u8Status;
 	utilityLibrary::CSimpleBuffer	m_in_buf,m_out_buf;
 };
