@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestCaseDlg", "TestCaseDlg\TestCaseDlg.vcxproj", "{4FA0D89C-DACF-4D48-9290-14B20826B9F2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{00B4DC0B-9F75-4C41-8DC8-1B6E3969C3AD} = {00B4DC0B-9F75-4C41-8DC8-1B6E3969C3AD}
