@@ -14,130 +14,9 @@
 /* 日期:                                                                */
 /* 作者:                                                                */
 /************************************************************************/
-http://101.227.244.171:8090/itower/jf/wslog/show
-44030743800024
-11010243840008
-44030143800019
-44030743800004
-http://101.227.253.208:58090/itower/jf/wslog/show
-35018143800001
+
 4．系统菜单ModifyStyle(WS_SYSMENU, 0);
 
-
-
-CButton类 (按钮)
-1.动态创建: CButton *m_wndBtn = new CButton
-m_wndBtn->Create(名称,风格, 位置(相对父窗口位置), 父窗口(this),控件ID); 
-2.风格:
-BS_DEFPUSHBUTTON | WS_VISIBLE | WS_CHILD :普通按钮风格
-BS_AUTORADIOBUTTON | WS_GROUP : 单选按钮风格(第一个单选按钮设置WS_GROUP属性)
-BS_GROUPBOX:? 组静态框
-BS_BITMAP:?? 支持位图
-3.动态创建事件:
-?(1)ON_BN_CLICKED(控件ID,响应函数); //单击事件
-4.特有函数:
-5:应用:
-(1)画背景色: 
-重载DrawItem虚函数， 并时控件设置BS_OWNERDRAW风格
-(2)绘制单选按钮背景色:
-? 使用WM_CTRLCOLOR消息:在响应函数中使用
-if (nCtlColor == CTLCOLOR_STATIC)
-??{
-???pDC->SetBkMode(TRANSPARENT);
-???return? CreateSolidBrush(RGB(0,255,0));
-??} 
-
-2)? CEdit类 (编辑框)
-1.?风格: 
-ES_MULTILINE : 多行，使用文本”\r\n”换行回车才显示。
-2. 动态创建事件:
-?EN_CHANGE, 输入一个字符显示后发生。 WM_COMMAND HIWORD(wParam) 
-?设置焦点和离开焦点: if (message == WM_COMMAND)
-?????switch(HIWORD(wParam))
-?????case EN_SETFOCUS:
-?????case EN_KILLFOCUS:
-3.特有函数:
-?? (1) SetSel(0, -1) //设置编辑框中光标位置,若二个参数相等则不会显示全选。
-?参数一:开始位置
-?参数二:结束位置前一个,如:? 256:若参数为1， 则在2|56。
-?-1表示全选。
-??选定编辑框内容
-?? (2) BOOL GetModify()
-??编辑框内容只要被修改，哪怕是修改一样的内容都返回1，否则0。
-(3)?void SetModify(BOOL)
-设置编辑框内容是否被修改， TRUE表示被修改。
-(3)void SetLimitText(UINT) 
-设置编辑框字符最大个数。
-参数:字符最大个数
-(4)?BOOL Undo();
-撤销本次操作，还原上次数据。和Ctrl+Z效果一样。
-(5)?int GetLineCount()
-获取编辑框的行的个数。
-4.通过向导和某个控件绑定值的范围， 然后调用UpdateData(TRUE)，若数据不对则会出现提示。? 
-???? 
-3)? CStatic类 (静态文本框)
-1.风格:
-SS_NOTIFY | SS_ENDELLIPSIS? //该属性在静态文本不够长时显示..., 若没有该属性，若最后一个单词不够长显示时会不显示的。
-SS_BITMAP|SS_CENTERIMAGE //在静态文本中设置bmp格式图片。
-2. 动态创建事件:
-3.特有函数:
-?(1)? SetBitmap
-?功能:设置bmp格式到静态框。
-?(in)参数(HBITMAP)一:位图句柄, ::LoadBitmap(AfxGetApp()->m_hInstance, MAKEINTRESOURCE(IDB_BITMAP_NO))。 或者使用CImage::Detach函数可使Png等格式转换Bmp格式。
-?返回值(HBITMAP):位图句柄， 若NULL则没设置成功
-4.应用:
-??将文本框背景去除凸现文字,可以使用WM_CTRLCOLOR消息响应函数中调用
-pDC->SetTextColor(RGB(255, 0, 0)) ;
-???pDC->SetBkMode(TRANSPARENT); 
-???return?? (HBRUSH)GetStockObject(NULL_BRUSH); 
-
-4)? CComboBox类 (组合框)
-?注意: CRect设定控件宽度包括下拉列表宽度
-1.风格:? 
-???? CBS_DROPDOWNLIST? //下拉风格(不可写)
-CBS_DROPDOWN? //下拉风格(可写)
-2. 动态创建事件:
-设置焦点和离开焦点: if (message == WM_COMMAND)
-?????switch(HIWORD(wParam))
-?????case CBN_SETFOCUS:
-?????case CBN_KILLFOCUS:
-3. 特有函数:
-?(1)int? GetCurSel() 获取当前选中的位置, 从0开始计算。 
-?(2)int? SetCurSel(int nSelect) 设置nSelect的位置, 从0开始计算。
-??如果 nSelect 为 -1 ，则清除当前的选择并返回 CB_ERR 。
-如果 nSelect 大于列表中项的个数，不产生效果，返回 CB_ERR。
-成功返回下标。
-(3) int AddString(const char*) 组合框末尾添加一个字符串 
-(4) void ResetContent() 清空组合框列表数据。 
-(5)int DeleteString(UINT uiSelect) 清空组合框列表指定位置数据,? 从0开始计算。 
-(6)int FindStringExact(int, const char*)
-第一个参数为-1表示从头开始查找
-第二个参数:表示要查找的字符串
-返回值: 找到该字符串所在列表的位置,从0开始计算。
-(7) int GetCount();? 
-?? 返回值:下拉框的个数， 0表示没有个数。 
-? 
-5)? CToolTipCtrl类 (气泡提示)
-1.风格： 
-2.动态创建事件:
-3.特有函数: 
-?
-4.应用 :
-在构造函数中加入(设置)
-?EnableToolTips(TRUE); 
-?m_ToolTip.Create(this,TTS_ALWAYSTIP); 
-?m_ToolTip.Activate(TRUE);?? //TRUE:气泡显示，FLASE气泡隐藏
-?m_ToolTip.AddTool(this,"");//添加 tips
-?m_ToolTip.SetMaxTipWidth(1000);? //换行
-?m_ToolTip.SetDelayTime(TTDT_INITIAL, 1);
-?m_ToolTip.SetDelayTime(TTDT_AUTOPOP, 500);? //提示持续时间
-?m_ToolTip.SetDelayTime(TTDT_RESHOW, 500);?? //多久时间出现提示。
-然后再PreTranslateMessage中加入(设置):
-if (m_pTip)
-?{m_pTip->RelayEvent( pMsg );}
-最后在OnCreate或OnInitDialog中加入(使用)
-????? m_ToolTip. AddTool(GetDlgItem(IDC_), "123"); //显示的内容如果为空， 则不会出现气泡提示
-??UpdateTipText()//实时改变气泡内容， 可以使用在鼠标移动响应函数中。 
 6)? CDateTimeCtrl类(日期控件)
 1.风格： 
 ?? DTS_RIGHTALIGN | DTS_UPDOWN | WS_TABSTOP 该风格与“MM-dd HH:mm”格式搭配
@@ -224,7 +103,6 @@ MCSC_TRAILINGTEXT设置当月份向前后翻页时,与今日相同的日期的颜色。
 7)? CListCtrl类(列表控件)
 2.?风格： 
 LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP
-LVS_SINGLESEL: 列表行只能单选
 ?拓展风格:
 ??LVS_EX_FULLROWSELECT???? 
 ??LVS_EX_ONECLICKACTIVATE
@@ -775,26 +653,3 @@ AfxGetThread()->m_nThreadID。
 ????????????? 返回值(BOOL): 成功非0。 
 3)???????? CWnd::RedrawWindow
 功能: RedrawWindow(0,0,RDW_ERASconst USHORT MEMUNIT_ALIGNMENT = 2;
-class CMemoryPool
-{
-public:
-CMemoryPool(USHORT nUnitSize, USHORT nInitSize = 1024, USHORT nGrowSize = 256);
-virtual ~CMemoryPool(void);
-public:
-void* Alloc();
-void Free(void* p);
-private:
-CMemoryBlock*    m_pHeadBlock;  //第一个内存块指针。
-USHORT            m_usUnitSize;  //内存块中内存单元大小
-USHORT            m_usInitSize;  //第一个内存块包含的内存单元个数
-USHORT            m_usGrowSize;  //非第一个内存块包含的内存单元个数
-};
-
-E|RDW_INVALIDATE);。 
-(in)参数一: 
-(in)参数二: 
-(in)参数三: 
-返回值: 
-
-
-
